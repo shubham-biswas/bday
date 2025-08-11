@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Birthday, Love! 💖</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap');
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #f9c1d9 0%, #f7a1c4 30%, #f4c2d5 60%, #ffe0f0 100%);
+    color: #5a3e1b;
+    overflow-x: hidden;
+    position: relative;
+  }
+  /* Stronger heart outlines in background (circles replaced with hearts) */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(circle at 20% 30%, transparent 10px, #d35d6e 11px, transparent 12px),
+      radial-gradient(circle at 50% 70%, transparent 12px, #d35d6e 13px, transparent 14px),
+      radial-gradient(circle at 80% 40%, transparent 8px, #d35d6e 9px, transparent 10px),
+      radial-gradient(circle at 70% 80%, transparent 9px, #d35d6e 10px, transparent 11px);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    max-width: 450px;
+    margin: 50px auto 70px;
+    background: #fff0f6;
+    border-radius: 25px;
+    padding: 30px 25px 40px;
+    box-shadow: 0 12px 30px rgba(211, 93, 110, 0.3);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3.3em;
+    margin-bottom: 15px;
+    color: #d35d6e;
+    text-shadow: 1px 1px 2px #f7a1c4;
+  }
+  .page {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .page.active {
+    display: block;
+    opacity: 1;
+  }
+  .memory {
+    font-size: 1.2em;
+    margin: 20px 0 40px;
+    min-height: 70px;
+  }
+  button {
+    background: #d35d6e;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1em;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(211,93,110,0.5);
+    transition: background 0.3s ease;
+    margin: 10px 5px 0 5px;
+  }
+  button:hover {
+    background: #b04050;
+  }
+  img {
+    max-width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(211,93,110,0.3);
+  }
+  #confetti {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 9999;
+    overflow: visible;
+  }
+  .letter {
+    font-size: 1.15em;
+    line-height: 1.5;
+    color: #7a4a57;
+    white-space: pre-wrap;
+    margin-top: 20px;
+  }
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #b5757f;
+  }
+  /* Photo grid styles */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+  }
+  .photo-grid img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(211, 93, 110, 0.3);
+    object-fit: cover;
+    height: 140px;
+  }
+  /* Fixed Next button */
+  .next-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #d35d6e;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1em;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(211, 93, 110, 0.5);
+    border: none;
+    transition: background 0.3s ease;
+    z-index: 1000;
+  }
+  .next-button:hover {
+    background: #b04050;
+  }
+  /* Fixed Back button */
+  .back-button {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: #f78fb3;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1em;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(247, 139, 179, 0.5);
+    border: none;
+    transition: background 0.3s ease;
+    z-index: 1000;
+  }
+  .back-button:hover {
+    background: #e35c8f;
+  }
+
+  /* Confetti & hearts animation */
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Heart shape for background hearts */
+  .background-heart {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 50% 50%, #e54b64 60%, transparent 65%);
+    clip-path: path("M10 3C7 0 2 0 2 5 2 9 10 14 10 14S18 9 18 5c0-5-5-5-8-2z");
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    will-change: transform;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="confetti"></div>
+
+<div class="container">
+
+  <!-- PAGE 1: Memories -->
+  <div class="page active" id="page1">
+    <h1>🎉 Happyyy Birthdayyyyy!!!! 🎉</h1>
+    <div class="memory" id="memory-text">29th June was on goddddd the best day of my life!!🚗💨</div>
+    <button id="next1">Next</button>
+  </div>
+
+  <!-- PAGE 2: Photos Gallery -->
+  <div class="page" id="page2">
+    <h1>Your Beautiful Moments 📸</h1>
+    <div class="photo-grid" id="photo-grid">
+      <!-- Photos inserted by JS -->
+    </div>
+    <button id="next2" class="next-button">Next</button>
+    <button id="back2" class="back-button">Back</button>
+  </div>
+
+  <!-- PAGE 3: Letter -->
+  <div class="page" id="page3">
+    <h1>For You, My Love 💖</h1>
+    <div class="letter" id="letter-text">
+      Dear Love,<br><br>
+      You light up my world every single day. Thank you for being the amazing person you are.<br>
+      I’m so grateful for all the memories we share and the ones we have yet to create.<br><br>
+      Happy Birthday, my heart! Here's to us and many more adventures together.<br><br>
+      With all my love,<br>
+      [Your Name]
+    </div>
+    <button id="back3" class="back-button">Back</button>
+  </div>
+
+</div>
+
+<footer>Made with 💕 and code by Shubham</footer>
+
+<script>
+// Data for memories
+const memories = [
+  "Remember our late night talks!? Making records till 4 am! 🚗💨",
+  "That time when we sparkled water on each other and enjoyed 🌧️💃",
+  "You always know how to make me smile 😊❤️"
+];
+
+// Photos array for 10 pics (replace with real image paths)
+const photos = [
+  "photo1.jpg",
+  "photo2.jpg",
+  "photo3.jpg",
+  "photo4.jpg",
+  "photo5.jpg",
+  "photo6.jpg",
+  "photo7.jpg",
+  "photo8.jpg",
+  "photo9.jpg",
+  "photo10.jpg"
+];
+
+// PAGE 1 - memories
+let memoryIndex = 0;
+const memoryText = document.getElementById('memory-text');
+const next1 = document.getElementById('next1');
+
+// PAGE 2 - photo grid and buttons
+const photoGrid = document.getElementById('photo-grid');
+const next2 = document.getElementById('next2');
+const back2 = document.getElementById('back2');
+
+// PAGE 3 - back button
+const back3 = document.getElementById('back3');
+
+// Pages
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const page3 = document.getElementById('page3');
+
+// Insert all photos into grid on page 2
+photos.forEach(src => {
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = "Photo";
+  photoGrid.appendChild(img);
+});
+
+// Confetti container
+const confettiContainer = document.getElementById('confetti');
+
+// Clear all confetti/hearts from screen and stop interval
+function clearConfetti() {
+  confettiContainer.innerHTML = '';
+  if (confettiInterval) {
+    clearInterval(confettiInterval);
+    confettiInterval = null;
+  }
+}
+
+// Create a falling piece (confetti or heart)
+function createFallingPiece(type) {
+  const el = document.createElement('div');
+  el.style.position = 'fixed';
+  el.style.top = '-20px';
+  el.style.left = `${Math.random() * window.innerWidth}px`;
+  el.style.width = '14px';
+  el.style.height = '14px';
+  el.style.opacity = Math.random() * 0.8 + 0.4;
+  el.style.pointerEvents = 'none';
+  el.style.zIndex = 10000;
+  el.style.animation = `fall ${3 + Math.random() * 3}s linear forwards`;
+  el.style.transformOrigin = 'center';
+
+  if (type === 'hearts') {
+    el.style.backgroundColor = 'transparent';
+    el.style.width = '18px';
+    el.style.height = '18px';
+    el.style.background = 'radial-gradient(circle at 50% 50%, #e54b64 60%, transparent 65%)';
+    el.style.clipPath = 'path("M10 3C7 0 2 0 2 5 2 9 10 14 10 14S18 9 18 5c0-5-5-5-8-2z")';
+  } else {
+    el.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 65%)`;
+    el.style.borderRadius = '3px';
+  }
+  confettiContainer.appendChild(el);
+
+  setTimeout(() => el.remove(), 6000);
+}
+
+// Launch confetti or hearts animation, pass type: 'confetti' or 'hearts'
+let confettiInterval = null;
+function launchConfetti(type = 'confetti') {
+  clearConfetti();
+  confettiInterval = setInterval(() => {
+    if (type === 'confetti') {
+      createFallingPiece('confetti');
+      if (Math.random() < 0.3) createFallingPiece('hearts');
+    } else if (type === 'hearts') {
+      createFallingPiece('hearts');
+    }
+  }, 150);
+}
+
+// --- NEW: drifting hearts in background ---
+
+const NUM_BG_HEARTS = 70;
+const bgHearts = [];
+
+function createBackgroundHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('background-heart');
+  // Initial position random
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.top = Math.random() * window.innerHeight + 'px';
+
+  // Random speed & direction
+  heart.speedX = (Math.random() - 0.5) * 0.15; // slow horizontal drift
+  heart.speedY = (Math.random() - 0.5) * 0.15; // slow vertical drift
+
+  // Random size scale 0.7 to 1.3
+  const scale = 0.7 + Math.random() * 0.6;
+  heart.style.transform = `scale(${scale})`;
+
+  document.body.appendChild(heart);
+  return heart;
+}
+
+function animateBackgroundHearts() {
+  bgHearts.forEach(h => {
+    let left = parseFloat(h.style.left);
+    let top = parseFloat(h.style.top);
+
+    left += h.speedX;
+    top += h.speedY;
+
+    // Wrap around edges so hearts drift endlessly
+    if (left < -20) left = window.innerWidth + 20;
+    else if (left > window.innerWidth + 20) left = -20;
+
+    if (top < -20) top = window.innerHeight + 20;
+    else if (top > window.innerHeight + 20) top = -20;
+
+    h.style.left = left + 'px';
+    h.style.top = top + 'px';
+  });
+
+  requestAnimationFrame(animateBackgroundHearts);
+}
+
+// Create and animate background hearts on load
+window.addEventListener('load', () => {
+  for(let i = 0; i < NUM_BG_HEARTS; i++) {
+    bgHearts.push(createBackgroundHeart());
+  }
+  animateBackgroundHearts();
+});
+
+// PAGE SWITCHING with confetti control:
+next1.addEventListener('click', () => {
+  memoryIndex++;
+  if (memoryIndex < memories.length) {
+    memoryText.textContent = memories[memoryIndex];
+  } else {
+    page1.classList.remove('active');
+    page2.classList.add('active');
+    launchConfetti('confetti');  // Confetti + hearts on page 2
+  }
+});
+
+next2.addEventListener('click', () => {
+  page2.classList.remove('active');
+  page3.classList.add('active');
+  launchConfetti('hearts'); // hearts only on page 3
+});
+
+back2.addEventListener('click', () => {
+  page2.classList.remove('active');
+  page1.classList.add('active');
+  launchConfetti('confetti'); // confetti + hearts on page 1
+});
+
+back3.addEventListener('click', () => {
+  page3.classList.remove('active');
+  page2.classList.add('active');
+  launchConfetti('confetti'); // confetti + hearts on page 2
+});
+
+// Start confetti+hearts only on page 1 load
+window.onload = () => {
+  launchConfetti('confetti');
+};
+</script>
+
+</body>
+</html>
